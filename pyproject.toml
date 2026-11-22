@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "variant2-config-translator"
+version = "1.1.0"
+description = "Транслятор учебного конфигурационного языка, вариант №2"
+requires-python = ">=3.10"
+dependencies = [
+    "lark>=1.1,<2",
+    "ruff>=0.17.6",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+dev = ["ruff>=0.4.0"] # Добавляем ruff для разработки
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."] # Чтобы pytest видел папку src
+
+[tool.setuptools.package-data]
+src = ["grammar.lark"]
+
+# ==========================================
+# НАСТРОЙКИ RUFF (Проверка на нарушения)
+# ==========================================
+[tool.ruff]
+line-length = 80  # Правило Р2 (Длина строк в Python > 80)
+indent-width = 4
+
+# Указываем, какие папки игнорировать
+exclude = [
+    ".venv",
+    ".git",
+    "__pycache__",
+    ".pytest_cache"
+]
+
+[tool.ruff.lint]
+select = [
+    "E",       # pycodestyle (Р2, И1)
+    "W",       # pycodestyle warnings
+    "F",       # Pyflakes
+    "C90",     # McCabe (Ц1)
+    "PL",      # Pylint (Ф1, А1, М1)
+    "PLR2004", # Явная проверка магических чисел в сравнениях (М1)
+    "D",       # pydocstyle (К1)
+    "N",       # pep8-naming (И1)
+]
+
+ignore = [
+    "D203",    # Конфликтует с D211
+    "D213",    # Конфликтует с D212
+]
+
+[tool.ruff.lint.mccabe]
+# Правило Ц1 (Цикломатическая сложность > 10)
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+# Правило Ф1 (Длина функции > 40 строк)
+max-statements = 40
+# Правило А1 (Аргументы функции > 7)
+max-args = 7
+
+[tool.ruff.format]
+# Автоформатирование кода (аналог Black)
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

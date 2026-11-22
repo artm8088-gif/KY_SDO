@@ -1,0 +1,25 @@
+start: declaration*
+
+declaration: NAME "is" value ";"
+
+?value: OCTAL                         -> number
+      | array
+      | expression
+
+array: "(" value ("," value)* ")"
+
+expression: "@{" postfix_item+ "}"
+
+?postfix_item: NAME                  -> reference
+             | OCTAL                 -> push_number
+             | "+"                  -> add
+             | "-"                  -> subtract
+             | minimum
+
+minimum: "min" "(" ")"            -> minimum
+
+OCTAL: /0[oO][0-7]+/
+NAME: /[_A-Z][_a-zA-Z0-9]*/
+
+%import common.WS
+%ignore WS
